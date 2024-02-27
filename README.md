@@ -1,1 +1,1 @@
-# EduPro-tutoring-platform
+# EduPro
