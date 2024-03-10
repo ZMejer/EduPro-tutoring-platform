@@ -3,32 +3,40 @@
 {% block content %}
   <div class="container">
     <h1>Rejestracja</h1>
-    <form>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+        {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    <form action="" method="POST">
+        {% csrf_token %}
         <div class="col-sm-5 mb-3 mt-5">
-            <input type="text" class="form-control" id="name" placeholder="Imię">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Imię">
         </div>
         <div class="col-sm-5 mb-3">
-            <input type="text" class="form-control" id="surname" placeholder="Nazwisko">
+            <input type="text" class="form-control" id="surname" name="surname" placeholder="Nazwisko">
         </div>
         <div class="col-sm-5 mb-3">
-            <input type="text" class="form-control" id="login" placeholder="Login">
+            <input type="text" class="form-control" id="login" name="login" placeholder="Login">
         </div>
         <div class="col-sm-5 mb-3">
-          <input type="email" class="form-control" id="email" placeholder="Email">
+          <input type="email" class="form-control" id="email" name="email" placeholder="Email">
         </div>
         <div class="col-sm-5 mb-3">
-          <input type="password" class="form-control" id="password" placeholder="Hasło">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Hasło">
         </div>
         <div class="col-sm-5 mb-3">
-            <input type="password" class="form-control" id="password" placeholder="Potwierdź hasło">
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Potwierdź hasło">
         </div>
           <div class="col-sm-5 mb-3">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="tutor" checked>
               <label class="form-check-label" for="gridRadios1">Nauczyciel</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="student">
               <label class="form-check-label" for="gridRadios2">Student</label>
             </div>
           </div>

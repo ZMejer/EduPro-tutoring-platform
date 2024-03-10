@@ -1,5 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Logowanie ⋅ EduPro{% endblock %}
 {% block content %}
-<h1>Logowanie</h1>
+<div class="container">
+    <h1>Logowanie</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="col-sm-5 mb-3 mt-5">
+            <input type="text" class="form-control" id="login" name="login" placeholder="Login">
+        </div>
+        <div class="col-sm-5 mb-3">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Hasło">
+        </div>
+        <div class="col-sm-5">
+        <button type="submit" class="btn btn-primary">Zaloguj się</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
