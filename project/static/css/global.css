@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+body, .navbar a {
+    background-color: #101728;
+    font-family: 'Jost', sans-serif !important;
+}
+
+h1, label {
+    color: whitesmoke !important;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.logo {
+    height: 80px;
+    width: auto;
+}
+
+.logo-text {
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.row {
+    margin-top: 100px;
+    text-align: center;
+}
+
+.banner {
+    height: 100px;
+    width: auto;
+    text-align: left;
+}
+
+.banner-text {
+    color: #fff;
+    font-size: 80px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.banner-button {
+    font-size: 20px;
+    border-radius: 25px;
+    margin-top: 60px;
+}
+
+.content {
+    text-align: center;
+}
+
+.content-photo {
+    height: 500px;
+    width: 500px;
+    object-fit: cover;
+    border-radius: 50px;
+    transition: 1s;
+    box-shadow: -30px 20px 100px 10px #9d3ef0;
+}
+
+.content-photo:hover {
+    box-shadow: -30px 20px 100px 10px #4c72ec;
+}
+         
+.btn-grad {
+    background-image: linear-gradient(to right, #8200f1 0%, #4c72ec  51%, #8200f1  100%);
+    padding: 15px 30px;
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-grad:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+}
+
+.content-text {
+    color: #fff;
+    font-size: 70px;
+    font-weight: bold;
+}
+
+.content-text-colored {
+    color: #9d3ef0;
+}
+
+.content-text-small {
+    color: #fff;
+    font-size: 25px;
+    font-weight: normal;
+    margin-top: 50px;
+}
+
+.break {
+    height: 120px;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
