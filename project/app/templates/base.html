@@ -27,11 +27,16 @@
               <a class="nav-link" href="home">Strona główna</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Korepetytorzy</a>
+              <a class="nav-link" href="korepetytorzy">Korepetytorzy</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Terminy</a>
+              <a class="nav-link" href="terminy">Terminy</a>
             </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="profil">Mój profil</a>
+            </li>
+            {% endif %}
           </ul>
           {% if user.is_authenticated %}
             <a href="{% url 'logout' %}" class="ms-auto me-2">

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Terminy ⋅ EduPro{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Terminy</h1>
+    <table class="table table-bordered mt-5">
+        <thead>
+            <tr>
+                {% for day in weekdays %}
+                    <th class="calendar-header">{{ day }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in cal %}
+                <tr>
+                    {% for day in week %}
+                        {% if day %}
+                            <td class="calendar-day">
+                                {{ day }}
+                                <div class="hour-checkboxes" data-toggle="buttons">
+                                    {% for hour in hours %}
+                                        <label class="btn btn-outline-success">
+                                            <input type="checkbox" name="selected_hours" value="{{ day }} {{ hour }}" onchange="toggleCheckbox(this)">
+                                            {{ hour }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        {% else %}
+                            <td class="empty-cell">&nbsp;</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    function toggleCheckbox(checkbox) {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        
+        checkboxes.forEach(function (otherCheckbox) {
+            if (otherCheckbox !== checkbox) {
+                otherCheckbox.checked = false;
+                var otherLabel = otherCheckbox.parentElement;
+                otherLabel.classList.remove('checked');
+                otherLabel.style.backgroundColor = '';
+            }
+        });
+
+        var label = checkbox.parentElement;
+        if (checkbox.checked) {
+            label.classList.add('checked');
+            label.style.backgroundColor = '#198754';
+        } else {
+            label.classList.remove('checked');
+            label.style.backgroundColor = '';
+        }
+    }
+</script>
+
+
+{% endblock %}

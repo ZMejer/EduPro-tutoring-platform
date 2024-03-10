@@ -4,9 +4,31 @@ body, .navbar a {
     background-color: #101728;
     font-family: 'Jost', sans-serif !important;
 }
-
+table tr td, table tr th{
+    background-color: #101728 !important;
+    color: #94969f !important;
+}
 h1, label {
     color: whitesmoke !important;
+}
+
+.calendar-header,
+.calendar-day,
+.empty-cell {
+    width: 50px;
+    height: 40px;
+}
+
+.calendar-header {
+    text-align: center;
+}
+
+.hour-checkboxes input[type="checkbox"] {
+    display: none;
+}
+
+p {
+    color: #94969f !important;
 }
 
 html {

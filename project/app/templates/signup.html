@@ -10,7 +10,7 @@
         </div>
         {% endfor %}
     {% endif %}
-    <form action="" method="POST">
+    <form action="" method="POST" id="registrationForm">
         {% csrf_token %}
         <div class="col-sm-5 mb-3 mt-5">
             <input type="text" class="form-control" id="name" name="name" placeholder="Imię">
@@ -30,7 +30,7 @@
         <div class="col-sm-5 mb-3">
             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Potwierdź hasło">
         </div>
-          <div class="col-sm-5 mb-3">
+        <div class="col-sm-5 mb-3">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="accountType" id="gridRadios1" value="tutor" checked>
               <label class="form-check-label" for="gridRadios1">Nauczyciel</label>
@@ -40,9 +40,38 @@
               <label class="form-check-label" for="gridRadios2">Student</label>
             </div>
           </div>
+        <div class="col-sm-5 mb-3" id="subjectField" style="display: none;">
+          <label for="subject" class="form-label">Przedmiot</label>
+          <select class="form-select" id="subject" name="subject">
+            <option value="Matematyka">Matematyka</option>
+            <option value="Fizyka">Fizyka</option>
+            <option value="Język polski">Język polski</option>
+            <option value="Język angielski">Język angielski</option>
+          </select>
+        </div>
         <div class="col-sm-5">
           <button type="submit" class="btn btn-primary">Zarejestruj się</button>
         </div>
     </form>
-  </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var accountTypeRadios = document.getElementsByName('accountType');
+      var subjectField = document.getElementById('subjectField');
+
+      function toggleSubjectField() {
+        if (accountTypeRadios[0].checked) {
+          subjectField.style.display = 'block';
+        } else {
+          subjectField.style.display = 'none';
+        }
+      }
+
+      toggleSubjectField();
+
+      for (var i = 0; i < accountTypeRadios.length; i++) {
+        accountTypeRadios[i].addEventListener('change', toggleSubjectField);
+      }
+    });
+  </script>
 {% endblock %}

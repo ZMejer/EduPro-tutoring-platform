@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Mój profil ⋅ EduPro{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Mój profil</h1>
+    {% if user.is_authenticated %}
+        <p>Imię: {{ user.name }}</p>
+        <p>Nazwisko: {{ user.surname }}</p>
+        <p>Typ konta: {% if user.account_type == 'tutor' %} Nauczyciel {% else %} Student {% endif %}</p>
+        <p>Login: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+        {% if user.account_type == "tutor" %}
+        <p>Przedmiot: {{ user.subject }}</p>
+        {% endif %}
+    {% else %}
+    <div class="alert alert-danger">
+        Zaloguj się, aby wyświetlić swój profil.
+    </div>
+    {% endif %}
+</div> 
+{% endblock %}
