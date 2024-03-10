@@ -23,7 +23,7 @@ h1, label {
     text-align: center;
 }
 
-.hour-checkboxes input[type="checkbox"] {
+.hour-checkboxes input[type="radio"] {
     display: none;
 }
 

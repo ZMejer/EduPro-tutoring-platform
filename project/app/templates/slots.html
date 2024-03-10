@@ -20,8 +20,8 @@
                                 {{ day }}
                                 <div class="hour-checkboxes" data-toggle="buttons">
                                     {% for hour in hours %}
-                                        <label class="btn btn-outline-success">
-                                            <input type="checkbox" name="selected_hours" value="{{ day }} {{ hour }}" onchange="toggleCheckbox(this)">
+                                        <label class="btn btn-outline-success btn-sm mt-1">
+                                            <input type="radio" name="selected_hours" value="{{ day }} {{ hour }}" onchange="toggleCheckbox(this)">
                                             {{ hour }}
                                         </label>
                                     {% endfor %}
@@ -38,7 +38,7 @@
 </div>
 <script>
     function toggleCheckbox(checkbox) {
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        var checkboxes = document.querySelectorAll('input[type="radio"]');
         
         checkboxes.forEach(function (otherCheckbox) {
             if (otherCheckbox !== checkbox) {
