@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 def home(request):
     return render(request, "home.html")
@@ -9,7 +10,7 @@ def signUpPage(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         surname = request.POST.get('surname')
-        login = request.POST.get('login')
+        user_login = request.POST.get('login')
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirmPassword = request.POST.get('confirmPassword')
@@ -18,7 +19,7 @@ def signUpPage(request):
             messages.error(request, 'Hasła nie są identyczne. Proszę wprowadzić zgodne hasła.')
         else:
             try:
-                newUser = User.objects.create_user(login, email, password)
+                newUser = User.objects.create_user(user_login, email, password)
                 newUser.save()
                 messages.success(request, 'Rejestracja zakończona pomyślnie. Możesz się teraz zalogować.')
             except Exception as e:
@@ -27,6 +28,17 @@ def signUpPage(request):
 
 def loginPage(request):
     if request.method == 'POST':
-        login = request.POST.get('login')
+        user_login = request.POST.get('login')
         password = request.POST.get('password')
+        user = authenticate(request, username=user_login, password=password)
+        if user is not None:
+            login(request,user)
+            messages.success(request, f'Witaj {user_login}. Jesteś teraz zalogowany.')
+        else:
+            messages.error(request, 'Hasło jest nieprawidłowe lub użytkownik nie istnieje.')
     return render(request, "login.html")
+
+def logoutUser(request):
+    logout(request)
+    messages.success(request, 'Pomyślnie wylogowano.')
+    return redirect('home')

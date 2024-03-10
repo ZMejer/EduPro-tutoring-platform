@@ -3,6 +3,13 @@
 {% block content %}
 <div class="container">
     <h1>Logowanie</h1>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+        {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
     <form action="" method="POST">
         {% csrf_token %}
         <div class="col-sm-5 mb-3 mt-5">
