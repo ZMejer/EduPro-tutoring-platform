@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from .models import CustomUser 
 
 def home(request):
     return render(request, "home.html")
@@ -14,12 +15,12 @@ def signUpPage(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirmPassword = request.POST.get('confirmPassword')
-        type = request.POST.get('gridRadios')
+        accountType = request.POST.get('accountType')
         if password != confirmPassword:
             messages.error(request, 'Hasła nie są identyczne. Proszę wprowadzić zgodne hasła.')
         else:
             try:
-                newUser = User.objects.create_user(user_login, email, password)
+                newUser = CustomUser.objects.create_user(username=user_login, email=email, password=password, name=name, surname=surname, account_type=accountType)
                 newUser.save()
                 messages.success(request, 'Rejestracja zakończona pomyślnie. Możesz się teraz zalogować.')
             except Exception as e:
