@@ -3,6 +3,7 @@
 {% block content %}
 <div class="container">
     <h1>Terminy</h1>
+    {% if user.is_authenticated %}
     <table class="table table-bordered mt-5">
         <thead>
             <tr>
@@ -59,6 +60,9 @@
         }
     }
 </script>
-
-
+{% else %}
+<div class="alert alert-success">
+    Zaloguj się, aby wyświetlić terminy.
+</div>
+{% endif %}
 {% endblock %}
