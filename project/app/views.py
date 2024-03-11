@@ -26,6 +26,7 @@ def signUpPage(request):
                 newUser = CustomUser.objects.create_user(username=user_login, email=email, password=password, name=name, surname=surname, account_type=accountType, subject=subject)
                 newUser.save()
                 messages.success(request, 'Rejestracja zakończona pomyślnie. Możesz się teraz zalogować.')
+                return redirect('loginPage')
             except Exception as e:
                 messages.error(request, f'Błąd rejestracji: {e}')
     return render(request, "signup.html")
@@ -38,6 +39,7 @@ def loginPage(request):
         if user is not None:
             login(request,user)
             messages.success(request, f'Witaj {user_login}. Jesteś teraz zalogowany.')
+            return redirect('home')
         else:
             messages.error(request, 'Hasło jest nieprawidłowe lub użytkownik nie istnieje.')
     return render(request, "login.html")
