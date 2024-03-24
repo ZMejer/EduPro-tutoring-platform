@@ -12,8 +12,8 @@
         {% if user.account_type == "tutor" %}
         <p>Przedmiot: {{ user.subject }}</p>
         {% endif %}
+        <h3>Moje rezerwacje:</h3>
         {% if reservations %}
-            <h2>Moje rezerwacje:</h2>
                 {% for reservation in reservations %}
                     <p>{{ reservation}}</p>
                 {% endfor %}

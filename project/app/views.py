@@ -52,18 +52,28 @@ def logoutUser(request):
 
 def myProfilePage(request):
     if request.user.is_authenticated:
-        reservations = Reservation.objects.filter(student_username=request.user.username)
-        reservations = reservations.order_by('date')
-
-        reservations_data = []
-        for i in range(len(reservations)):
-            tutor_username_res = Reservation.objects.filter(Q(student_username=request.user.username) & Q(date=reservations[i].date))
-            tutors_username = list(tutor_username_res.values_list('tutor_username', flat=True))[0]
-            tutors_object = CustomUser.objects.filter(username=tutors_username)
-            tutors_data = list(tutors_object.values_list('name','surname')[0])
-            tutors_name = tutors_data[0] + " " + tutors_data[1]
-            reservations_data.append(f"Data: {reservations[i].date}, Korepetytor: {tutors_name}")
-
+        if request.user.account_type == 'student':
+            reservations = Reservation.objects.filter(student_username=request.user.username)
+            reservations = reservations.order_by('date')
+            reservations_data = []
+            for i in range(len(reservations)):
+                tutor_username_res = Reservation.objects.filter(Q(student_username=request.user.username) & Q(date=reservations[i].date))
+                tutors_username = list(tutor_username_res.values_list('tutor_username', flat=True))[0]
+                tutors_object = CustomUser.objects.filter(username=tutors_username)
+                tutors_data = list(tutors_object.values_list('name','surname')[0])
+                tutors_name = tutors_data[0] + " " + tutors_data[1]
+                reservations_data.append(f"Data: {reservations[i].date}, Korepetytor: {tutors_name}")
+        elif request.user.account_type == 'tutor':
+            reservations = Reservation.objects.filter(tutor_username=request.user.username)
+            reservations = reservations.order_by('date')
+            reservations_data = []
+            for i in range(len(reservations)):
+                student_username_res = Reservation.objects.filter(Q(tutor_username=request.user.username) & Q(date=reservations[i].date))
+                students_username = list(student_username_res.values_list('student_username', flat=True))[0]
+                students_object = CustomUser.objects.filter(username=students_username)
+                students_data = list(students_object.values_list('name','surname')[0])
+                students_name = students_data[0] + " " + students_data[1]
+                reservations_data.append(f"Data: {reservations[i].date}, Uczeń: {students_name}")
         return render(request, 'profile.html', {'reservations': reservations_data})
     else:
         return render(request, 'profile.html')
