@@ -2,9 +2,10 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from .models import CustomUser 
+from .models import CustomUser, Reservation
 import calendar
 from datetime import datetime
+from django.db.models import Q
 
 def home(request):
     return render(request, "home.html")
@@ -50,18 +51,45 @@ def logoutUser(request):
     return redirect('home')
 
 def myProfilePage(request):
-    return render(request, "profile.html")
+    if request.user.is_authenticated:
+        reservations = Reservation.objects.filter(student_username=request.user.username)
+        reservations = reservations.order_by('date')
+
+        reservations_data = []
+        for i in range(len(reservations)):
+            tutor_username_res = Reservation.objects.filter(Q(student_username=request.user.username) & Q(date=reservations[i].date))
+            tutors_username = list(tutor_username_res.values_list('tutor_username', flat=True))[0]
+            tutors_object = CustomUser.objects.filter(username=tutors_username)
+            tutors_data = list(tutors_object.values_list('name','surname')[0])
+            tutors_name = tutors_data[0] + " " + tutors_data[1]
+            reservations_data.append(f"Data: {reservations[i].date}, Korepetytor: {tutors_name}")
+
+        return render(request, 'profile.html', {'reservations': reservations_data})
+    else:
+        return render(request, 'profile.html')
 
 def slots(request):
     now = datetime.now()
     cal = calendar.monthcalendar(now.year, now.month)
+    month = now.month
     weekdays = calendar.weekheader(3).split()
     for week in cal:
         for day in range(len(week)):
             if week[day] == 0:
                 week[day] = None
     hours = [f"{hour}:00" for hour in range(8, 19)]
-    return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours})
+    users = CustomUser.objects.all()
+    if request.method == 'POST':
+        student_login = str(request.user.username)
+        tutor_login = request.POST.get('tutor')
+        date = request.POST.get('selected_hours')
+        try:
+            newReservation = Reservation.objects.create(date=date, student_username=student_login, tutor_username=tutor_login)
+            newReservation.save()
+            messages.success(request, 'Rezerwacja została potwierdzona.')
+        except Exception as e:
+            messages.error(request, f'Bład rezerwacji: {e}')
+    return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month})
 
 def tutors(request):
     users = CustomUser.objects.all()

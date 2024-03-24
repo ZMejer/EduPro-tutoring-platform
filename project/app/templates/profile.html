@@ -12,6 +12,14 @@
         {% if user.account_type == "tutor" %}
         <p>Przedmiot: {{ user.subject }}</p>
         {% endif %}
+        {% if reservations %}
+            <h2>Moje rezerwacje:</h2>
+                {% for reservation in reservations %}
+                    <p>{{ reservation}}</p>
+                {% endfor %}
+        {% else %}
+            <p>Brak rezerwacji.</p>
+        {% endif %}
     {% else %}
     <div class="alert alert-danger">
         Zaloguj się, aby wyświetlić swój profil.

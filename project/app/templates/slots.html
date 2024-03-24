@@ -3,39 +3,58 @@
 {% block content %}
 <div class="container">
     <h1>Terminy</h1>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+        {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
     {% if user.is_authenticated %}
-    <table class="table table-bordered mt-5">
-        <thead>
-            <tr>
-                {% for day in weekdays %}
-                    <th class="calendar-header">{{ day }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for week in cal %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <select class="form-control mt-5 w-50" id="tutor" name="tutor" placeholder="Wybierz korepetytora" required>
+            <option value="" disabled selected hidden>Wybierz korepetytora</option>
+            {% for user in users %}
+                {% if user.account_type == 'tutor' %}
+                    <option value="{{ user.username }}">{{ user.name }} {{ user.surname }} - {{ user.subject }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>    
+        <table class="table table-bordered mt-3">
+            <thead>
                 <tr>
-                    {% for day in week %}
-                        {% if day %}
-                            <td class="calendar-day">
-                                {{ day }}
-                                <div class="hour-checkboxes" data-toggle="buttons">
-                                    {% for hour in hours %}
-                                        <label class="btn btn-outline-success btn-sm mt-1">
-                                            <input type="radio" name="selected_hours" value="{{ day }} {{ hour }}" onchange="toggleCheckbox(this)">
-                                            {{ hour }}
-                                        </label>
-                                    {% endfor %}
-                                </div>
-                            </td>
-                        {% else %}
-                            <td class="empty-cell">&nbsp;</td>
-                        {% endif %}
+                    {% for day in weekdays %}
+                        <th class="calendar-header">{{ day }}</th>
                     {% endfor %}
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for week in cal %}
+                    <tr>
+                        {% for day in week %}
+                            {% if day %}
+                                <td class="calendar-day">
+                                    {{ day }}
+                                    <div class="hour-checkboxes" data-toggle="buttons">
+                                        {% for hour in hours %}
+                                            <label class="btn btn-outline-success btn-sm mt-1">
+                                                <input type="radio" name="selected_hours" value="{% if day < 10 %}0{{ day }}{% else %}{{ day }}{% endif %}.{% if month < 10 %}0{{ month }}{% else %}{{ month }}{% endif %} {{ hour }}" onchange="toggleCheckbox(this)">
+                                                {{ hour }}
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            {% else %}
+                                <td class="empty-cell">&nbsp;</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary mb-5 mt-3 float-end">Potwierdź termin</button>
+    </form>
 </div>
 <script>
     function toggleCheckbox(checkbox) {
