@@ -82,7 +82,10 @@
                                                 {% endif %}
                                                 {% endif %}
                                                 {% endfor %}
-                                                {% endfor %}>
+                                                {% endfor %}
+                                                {% if not chosen_tutor_name or day < current_day or day == current_day and hour <= current_hour %}
+                                                disabled
+                                                {% endif %}>
                                                 {{ hour }}:00
                                             </label>
                                         {% endfor %}
