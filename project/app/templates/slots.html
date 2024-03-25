@@ -50,8 +50,39 @@
                                     {{ day }}
                                     <div class="hour-checkboxes" data-toggle="buttons">
                                         {% for hour in hours %}
-                                            <label class="btn {% if day < current_day or day == current_day and hour <= current_hour %}btn-outline-secondary{% else %}btn-outline-success {% endif %} btn-sm mt-1">
-                                                <input type="radio" name="selected_hours" value="{% if day < 10 %}0{{ day }}{% else %}{{ day }}{% endif %}.{% if month < 10 %}0{{ month }}{% else %}{{ month }}{% endif %} {{ hour }}" onchange="toggleCheckbox(this)" {% if not chosen_tutor_name or day < current_day or day == current_day and hour <= current_hour %}disabled{% endif %}>
+                                            <label class="btn 
+                                            {% if taken_dates %}
+                                            {% for taken_date in taken_dates %}
+                                            {% for taken_hour in taken_hours %}
+                                            {% if forloop.counter == forloop.parentloop.counter %}
+                                            {% if day < current_day or day == current_day and hour <= current_hour %}
+                                            btn-outline-secondary
+                                            {% elif day == taken_date and hour == taken_hour %}
+                                            btn-outline-danger
+                                            {% else %}
+                                            btn-outline-success
+                                            {% endif %}
+                                            {% endif %}
+                                            {% endfor %}
+                                            {% endfor %}
+                                            {% else %}
+                                            {% if day < current_day or day == current_day and hour <= current_hour %}
+                                            btn-outline-secondary
+                                            {% else %}
+                                            btn-outline-success
+                                            {% endif %}
+                                            {% endif %}
+                                            btn-sm mt-1">
+                                                <input type="radio" name="selected_hours" value="{% if day < 10 %}0{{ day }}{% else %}{{ day }}{% endif %}.{% if month < 10 %}0{{ month }}{% else %}{{ month }}{% endif %} {{ hour }}:00" onchange="toggleCheckbox(this)"
+                                                {% for taken_date in taken_dates %}
+                                                {% for taken_hour in taken_hours %}
+                                                {% if forloop.counter == forloop.parentloop.counter %}
+                                                {% if not chosen_tutor_name or day < current_day or day == current_day and hour <= current_hour or day == taken_date and hour == taken_hour%}
+                                                disabled
+                                                {% endif %}
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% endfor %}>
                                                 {{ hour }}:00
                                             </label>
                                         {% endfor %}
