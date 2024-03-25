@@ -13,14 +13,26 @@
     {% if user.is_authenticated %}
     <form action="" method="POST">
         {% csrf_token %}
-        <select class="form-control mt-5 w-50" id="tutor" name="tutor" placeholder="Wybierz korepetytora" required>
+        <div class="d-flex mt-5 mb-3">
+        <input type="hidden" name="form_type" value="selectTutor">
+        <select class="form-control w-50 me-3" id="tutor" name="tutor" placeholder="Wybierz korepetytora" required>
             <option value="" disabled selected hidden>Wybierz korepetytora</option>
             {% for user in users %}
                 {% if user.account_type == 'tutor' %}
                     <option value="{{ user.username }}">{{ user.name }} {{ user.surname }} - {{ user.subject }}</option>
                 {% endif %}
             {% endfor %}
-        </select>    
+        </select>
+        <button type="submit" class="btn btn-primary">Sprawdź terminy</button>    
+        </div>
+    </form>
+        {% if chosen_tutor_name %}
+        <p>Wybrany korepetytor: {{ chosen_tutor_name }}</p>
+        {% endif %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="selectDate">
+        <input type="hidden" name="chosenTutor" value="{% if chosen_tutor_username %}{{chosen_tutor_username}}{% else %}{% endif %}">
         <table class="table table-bordered mt-3">
             <thead>
                 <tr>
@@ -39,7 +51,7 @@
                                     <div class="hour-checkboxes" data-toggle="buttons">
                                         {% for hour in hours %}
                                             <label class="btn btn-outline-success btn-sm mt-1">
-                                                <input type="radio" name="selected_hours" value="{% if day < 10 %}0{{ day }}{% else %}{{ day }}{% endif %}.{% if month < 10 %}0{{ month }}{% else %}{{ month }}{% endif %} {{ hour }}" onchange="toggleCheckbox(this)">
+                                                <input type="radio" name="selected_hours" value="{% if day < 10 %}0{{ day }}{% else %}{{ day }}{% endif %}.{% if month < 10 %}0{{ month }}{% else %}{{ month }}{% endif %} {{ hour }}" onchange="toggleCheckbox(this)" {% if not chosen_tutor_name %}disabled{% endif %}>
                                                 {{ hour }}
                                             </label>
                                         {% endfor %}

@@ -52,10 +52,10 @@ def logoutUser(request):
 
 def myProfilePage(request):
     if request.user.is_authenticated:
+        reservations_data = []
         if request.user.account_type == 'student':
             reservations = Reservation.objects.filter(student_username=request.user.username)
             reservations = reservations.order_by('date')
-            reservations_data = []
             for i in range(len(reservations)):
                 tutor_username_res = Reservation.objects.filter(Q(student_username=request.user.username) & Q(date=reservations[i].date))
                 tutors_username = list(tutor_username_res.values_list('tutor_username', flat=True))[0]
@@ -66,7 +66,6 @@ def myProfilePage(request):
         elif request.user.account_type == 'tutor':
             reservations = Reservation.objects.filter(tutor_username=request.user.username)
             reservations = reservations.order_by('date')
-            reservations_data = []
             for i in range(len(reservations)):
                 student_username_res = Reservation.objects.filter(Q(tutor_username=request.user.username) & Q(date=reservations[i].date))
                 students_username = list(student_username_res.values_list('student_username', flat=True))[0]
@@ -90,15 +89,22 @@ def slots(request):
     hours = [f"{hour}:00" for hour in range(8, 19)]
     users = CustomUser.objects.all()
     if request.method == 'POST':
-        student_login = str(request.user.username)
-        tutor_login = request.POST.get('tutor')
-        date = request.POST.get('selected_hours')
-        try:
-            newReservation = Reservation.objects.create(date=date, student_username=student_login, tutor_username=tutor_login)
-            newReservation.save()
-            messages.success(request, 'Rezerwacja została potwierdzona.')
-        except Exception as e:
-            messages.error(request, f'Bład rezerwacji: {e}')
+        if request.POST.get("form_type") == 'selectTutor':
+            tutor_login = request.POST.get('tutor')
+            tutors_object = CustomUser.objects.filter(username=tutor_login)
+            tutors_data = list(tutors_object.values_list('name','surname')[0])
+            tutors_name = tutors_data[0] + " " + tutors_data[1]
+            return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'chosen_tutor_name':tutors_name, 'chosen_tutor_username':tutor_login})
+        elif request.POST.get("form_type") == 'selectDate':
+            student_login = str(request.user.username)
+            tutor_login = request.POST.get('chosenTutor')
+            date = request.POST.get('selected_hours')
+            try:
+                newReservation = Reservation.objects.create(date=date, student_username=student_login, tutor_username=tutor_login)
+                newReservation.save()
+                messages.success(request, 'Rezerwacja została potwierdzona.')
+            except Exception as e:
+                messages.error(request, f'Bład rezerwacji: {e}')
     return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month})
 
 def tutors(request):
