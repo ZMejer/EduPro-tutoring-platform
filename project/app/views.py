@@ -94,7 +94,7 @@ def slots(request):
             tutors_object = CustomUser.objects.filter(username=tutor_login)
             tutors_data = list(tutors_object.values_list('name','surname')[0])
             tutors_name = tutors_data[0] + " " + tutors_data[1]
-            return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'chosen_tutor_name':tutors_name, 'chosen_tutor_username':tutor_login})
+            return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'current_day':now.day,'chosen_tutor_name':tutors_name, 'chosen_tutor_username':tutor_login})
         elif request.POST.get("form_type") == 'selectDate':
             student_login = str(request.user.username)
             tutor_login = request.POST.get('chosenTutor')
@@ -105,7 +105,7 @@ def slots(request):
                 messages.success(request, 'Rezerwacja została potwierdzona.')
             except Exception as e:
                 messages.error(request, f'Bład rezerwacji: {e}')
-    return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month})
+    return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'current_day':now.day})
 
 def tutors(request):
     users = CustomUser.objects.all()

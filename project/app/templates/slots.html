@@ -50,8 +50,8 @@
                                     {{ day }}
                                     <div class="hour-checkboxes" data-toggle="buttons">
                                         {% for hour in hours %}
-                                            <label class="btn btn-outline-success btn-sm mt-1">
-                                                <input type="radio" name="selected_hours" value="{% if day < 10 %}0{{ day }}{% else %}{{ day }}{% endif %}.{% if month < 10 %}0{{ month }}{% else %}{{ month }}{% endif %} {{ hour }}" onchange="toggleCheckbox(this)" {% if not chosen_tutor_name %}disabled{% endif %}>
+                                            <label class="btn {% if day < current_day %}btn-outline-secondary{% else %}btn-outline-success {% endif %} btn-sm mt-1">
+                                                <input type="radio" name="selected_hours" value="{% if day < 10 %}0{{ day }}{% else %}{{ day }}{% endif %}.{% if month < 10 %}0{{ month }}{% else %}{{ month }}{% endif %} {{ hour }}" onchange="toggleCheckbox(this)" {% if not chosen_tutor_name or day < current_day %}disabled{% endif %}>
                                                 {{ hour }}
                                             </label>
                                         {% endfor %}
