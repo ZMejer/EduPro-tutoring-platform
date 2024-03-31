@@ -4,8 +4,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import CustomUser, Reservation
 import calendar
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db.models import Q
+from django.utils import timezone
 
 def home(request):
     return render(request, "home.html")
@@ -78,7 +79,7 @@ def myProfilePage(request):
         return render(request, 'profile.html')
 
 def slots(request):
-    now = datetime.now()
+    now = timezone.localtime(timezone.now())
     cal = calendar.monthcalendar(now.year, now.month)
     month = now.month
     weekdays = calendar.weekheader(3).split()
@@ -88,6 +89,13 @@ def slots(request):
                 week[day] = None
     hours = range(8,19)
     users = CustomUser.objects.all()
+    prev_month=month-1
+    for i in range(0,32):
+        for j in range(0,19):
+            if i < 10:
+                Reservation.objects.filter(date="0"+str(i)+".0"+str(prev_month)+" "+str(j)+":00").delete()
+            else:
+                Reservation.objects.filter(date=str(i)+".0"+str(prev_month)+" "+str(j)+":00").delete()
     if request.method == 'POST':
         if request.POST.get("form_type") == 'selectTutor':
             tutor_login = request.POST.get('tutor')
