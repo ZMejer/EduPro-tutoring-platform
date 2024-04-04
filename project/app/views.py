@@ -106,7 +106,7 @@ def slots(request):
             taken_slots = list(taken_slots_objects.values_list('date', flat=True))
             taken_dates = [int(slot.split()[0][:-3]) for slot in taken_slots]
             taken_hours = [int(slot.split()[1][:-3]) for slot in taken_slots]
-            return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'current_day':now.day,'current_hour':now.hour+1,'chosen_tutor_name':tutors_name, 'chosen_tutor_username':tutor_login, 'taken_dates':taken_dates, 'taken_hours':taken_hours})
+            return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'current_day':now.day,'current_hour':now.hour,'chosen_tutor_name':tutors_name, 'chosen_tutor_username':tutor_login, 'taken_dates':taken_dates, 'taken_hours':taken_hours})
         elif request.POST.get("form_type") == 'selectDate':
             student_login = str(request.user.username)
             tutor_login = request.POST.get('chosenTutor')
@@ -117,7 +117,7 @@ def slots(request):
                 messages.success(request, 'Rezerwacja została potwierdzona.')
             except Exception as e:
                 messages.error(request, f'Bład rezerwacji: {e}')
-    return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'current_day':now.day, 'current_hour':now.hour+1})
+    return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'current_day':now.day, 'current_hour':now.hour})
 
 def tutors(request):
     users = CustomUser.objects.all()
