@@ -2,11 +2,15 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from .models import CustomUser, Reservation
+from .models import CustomUser, Reservation, UserPayment
 import calendar
 from datetime import datetime, timedelta
 from django.db.models import Q
 from django.utils import timezone
+from django.conf import settings
+import stripe
+import time
+from django.views.decorators.csrf import csrf_exempt
 
 def home(request):
     return render(request, "home.html")
@@ -108,16 +112,76 @@ def slots(request):
             taken_hours = [int(slot.split()[1][:-3]) for slot in taken_slots]
             return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'current_day':now.day,'current_hour':now.hour,'chosen_tutor_name':tutors_name, 'chosen_tutor_username':tutor_login, 'taken_dates':taken_dates, 'taken_hours':taken_hours})
         elif request.POST.get("form_type") == 'selectDate':
-            student_login = str(request.user.username)
-            tutor_login = request.POST.get('chosenTutor')
-            date = request.POST.get('selected_hours')
-            try:
-                newReservation = Reservation.objects.create(date=date, student_username=student_login, tutor_username=tutor_login)
-                newReservation.save()
-                messages.success(request, 'Rezerwacja została potwierdzona.')
-            except Exception as e:
-                messages.error(request, f'Bład rezerwacji: {e}')
+            request.session['student_login'] = str(request.user.username)
+            request.session['tutor_login'] = request.POST.get('chosenTutor')
+            request.session['date'] = request.POST.get('selected_hours')
+        # Payment system (source: https://github.com/dotja/django-example/blob/main/user_payment/views.py)
+        stripe.api_key = 'sk_test_51PCpbN2LfliGhtUejICAbYZ1jWXGLgdksMGluf0faJpGMaRdGRPwqlbv7T7RVWCsm1WKqUWfiqhEnRtbT2TsY3Qe00nti2IPQo'
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types = ['card'],
+            line_items = [
+                {
+                    'price': 'price_1PCpnP2LfliGhtUedYKzjbP9',
+                    'quantity': 1,
+                },
+            ],
+            mode = 'payment',
+            customer_creation = 'always',
+            success_url = 'http://127.0.0.1:8000/payment_successfull?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url = 'http://127.0.0.1:8000/payment_cancelled',
+        )
+        return redirect(checkout_session.url, code=303)
     return render(request, "slots.html", {'cal': cal, 'weekdays': weekdays, 'hours': hours, 'users': users, 'month': month, 'current_day':now.day, 'current_hour':now.hour})
+
+def payment_successfull(request):
+    student_login = request.session.get('student_login')
+    tutor_login = request.session.get('tutor_login')
+    date = request.session.get('date')
+    if student_login and tutor_login and date:
+        try:
+            new_reservation = Reservation.objects.create(date=date, student_username=student_login, tutor_username=tutor_login)
+            new_reservation.save()
+            messages.success(request, 'Rezerwacja została potwierdzona.')
+        except Exception as e:
+            messages.error(request, f'Błąd rezerwacji: {e}')
+        del request.session['student_login']
+        del request.session['tutor_login']
+        del request.session['date'] 
+    else:
+        messages.error(request, 'Brak danych rezerwacji w sesji.')   
+    return render(request, "payment_successfull.html")
+
+
+def payment_cancelled(request):
+    del request.session['student_login']
+    del request.session['tutor_login']
+    del request.session['date'] 
+    return render(request, "payment_cancelled.html")
+
+@csrf_exempt
+def stripe_webhook(request):
+    stripe.api_key = 'sk_test_51PCpbN2LfliGhtUejICAbYZ1jWXGLgdksMGluf0faJpGMaRdGRPwqlbv7T7RVWCsm1WKqUWfiqhEnRtbT2TsY3Qe00nti2IPQo'
+    time.sleep(10)
+    payload = request.body
+    signature_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, signature_header, settings.STRIPE_WEBHOOK_SECRET_TEST
+        )
+    except ValueError as e:
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        return HttpResponse(status=400)
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        session_id = session.get('id', None)
+        time.sleep(15)
+        user_payment = UserPayment.objects.get(stripe_checkout_id=session_id)
+        line_items = stripe.checkout.Session.list_line_items(session_id, limit=1)
+        user_payment.payment_bool = True
+        user_payment.save()
+    return HttpResponse(status=200)
 
 def tutors(request):
     users = CustomUser.objects.all()
