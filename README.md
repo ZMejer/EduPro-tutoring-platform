@@ -20,6 +20,7 @@ To run EduPro locally, follow these steps:
 1. Visit [EduPro](http://eduprotutoring.pythonanywhere.com).
 2. Sign up for an account as a tutor or a student.
 3. Start scheduling your tutoring sessions!
+4. To use the test payment system, your card number should be: `4242 4242 4242 4242`
 
 <br></br>
 # [EduPro](http://eduprotutoring.pythonanywhere.com "EduPro") :poland:
@@ -43,5 +44,5 @@ Aby uruchomić EduPro lokalnie, wykonaj następujące kroki:
 1. Odwiedź [EduPro](http://eduprotutoring.pythonanywhere.com).
 2. Zarejestruj się jako korepetytor lub uczeń.
 3. Zacznij umawiać się na korepetycje!
-
+4. Aby użyć testowego systemu płatności, numer twojej karty powinien być: `4242 4242 4242 4242`
 
