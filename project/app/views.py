@@ -191,4 +191,5 @@ def cancel_reservation(request, reservation_id):
     if request.method == 'POST':
         reservation = Reservation.objects.get(id=reservation_id)
         reservation.delete()
+        messages.success(request, 'Rezerwacja została anulowana.')
         return redirect('myProfilePage')

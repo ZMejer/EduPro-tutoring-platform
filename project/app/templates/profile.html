@@ -3,6 +3,13 @@
 {% block content %}
 <div class="container">
     <h1>Mój profil</h1>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+        {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
     {% if user.is_authenticated %}
         <p>Imię: {{ user.name }}</p>
         <p>Nazwisko: {{ user.surname }}</p>
