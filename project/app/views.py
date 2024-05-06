@@ -127,6 +127,8 @@ def slots(request):
             ],
             mode = 'payment',
             customer_creation = 'always',
+            #success_url = 'http://eduprotutoring.pythonanywhere.com/payment_successfull?session_id={CHECKOUT_SESSION_ID}',
+            #cancel_url = 'http://eduprotutoring.pythonanywhere.com/payment_cancelled',
             success_url = 'http://127.0.0.1:8000/payment_successfull?session_id={CHECKOUT_SESSION_ID}',
             cancel_url = 'http://127.0.0.1:8000/payment_cancelled',
         )
