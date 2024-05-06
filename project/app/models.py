@@ -13,12 +13,13 @@ class CustomUser(AbstractUser):
         return(f"{self.username} {self.account_type}")
 
 class Reservation(models.Model):
+    id = models.AutoField(primary_key=True)
     date = models.CharField(max_length=30)
     student_username = models.CharField(max_length=30, null=True, default='')
     tutor_username = models.CharField(max_length=30, null=True, default='')
 
     def __str__(self):
-        return (f"Uczeń: {self.student_username}, Korepetytor: {self.tutor_username}, Data: {self.date}")
+        return (f"ID: {self.id}, Uczeń: {self.student_username}, Korepetytor: {self.tutor_username}, Data: {self.date}")
     
 # source of user payment: https://github.com/dotja/django-example/blob/main/user_payment/models.py    
 class UserPayment(models.Model):

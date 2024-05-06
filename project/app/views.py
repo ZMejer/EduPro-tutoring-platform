@@ -61,23 +61,21 @@ def myProfilePage(request):
         if request.user.account_type == 'student':
             reservations = Reservation.objects.filter(student_username=request.user.username)
             reservations = reservations.order_by('date')
-            for i in range(len(reservations)):
-                tutor_username_res = Reservation.objects.filter(Q(student_username=request.user.username) & Q(date=reservations[i].date))
-                tutors_username = list(tutor_username_res.values_list('tutor_username', flat=True))[0]
-                tutors_object = CustomUser.objects.filter(username=tutors_username)
-                tutors_data = list(tutors_object.values_list('name','surname')[0])
-                tutors_name = tutors_data[0] + " " + tutors_data[1]
-                reservations_data.append(f"Data: {reservations[i].date}, Korepetytor: {tutors_name}")
+            for reservation in reservations:
+                tutors_username = reservation.tutor_username
+                tutors_object = CustomUser.objects.filter(username=tutors_username).first()
+                if tutors_object:
+                    tutors_name = f"{tutors_object.name} {tutors_object.surname}"
+                    reservations_data.append({'id': reservation.id, 'data': reservation.date, 'name': "Nauczyciel: "+tutors_name})
         elif request.user.account_type == 'tutor':
             reservations = Reservation.objects.filter(tutor_username=request.user.username)
             reservations = reservations.order_by('date')
-            for i in range(len(reservations)):
-                student_username_res = Reservation.objects.filter(Q(tutor_username=request.user.username) & Q(date=reservations[i].date))
-                students_username = list(student_username_res.values_list('student_username', flat=True))[0]
-                students_object = CustomUser.objects.filter(username=students_username)
-                students_data = list(students_object.values_list('name','surname')[0])
-                students_name = students_data[0] + " " + students_data[1]
-                reservations_data.append(f"Data: {reservations[i].date}, Uczeń: {students_name}")
+            for reservation in reservations:
+                students_username = reservation.student_username
+                students_object = CustomUser.objects.filter(username=students_username).first()
+                if students_object:
+                    students_name = f"{students_object.name} {students_object.surname}"
+                    reservations_data.append({'id': reservation.id, 'data': reservation.date, 'name': "Uczeń: "+students_name})
         return render(request, 'profile.html', {'reservations': reservations_data})
     else:
         return render(request, 'profile.html')
@@ -188,3 +186,9 @@ def stripe_webhook(request):
 def tutors(request):
     users = CustomUser.objects.all()
     return render(request, 'tutors.html', {'users': users})
+
+def cancel_reservation(request, reservation_id):
+    if request.method == 'POST':
+        reservation = Reservation.objects.get(id=reservation_id)
+        reservation.delete()
+        return redirect('myProfilePage')

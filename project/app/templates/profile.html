@@ -14,9 +14,15 @@
         {% endif %}
         <h3>Moje rezerwacje:</h3>
         {% if reservations %}
-                {% for reservation in reservations %}
-                    <p>{{ reservation}}</p>
-                {% endfor %}
+            {% for reservation in reservations %}
+                <div class="reservation">
+                    <p>{{ reservation.name }}, Data: {{ reservation.data }}</p>
+                    <form action="{% url 'cancel_reservation' reservation.id %}" method="post" class="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger">Odwołaj</button>
+                    </form>
+                </div>
+            {% endfor %}
         {% else %}
             <p>Brak rezerwacji.</p>
         {% endif %}

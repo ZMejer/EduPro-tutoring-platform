@@ -134,3 +134,10 @@ a {
 a:hover {
     text-decoration: none;
 }
+
+.reservation {
+    display:flex;
+    width: 40%;
+    justify-content: space-between;
+    margin-top:10px;
+}
