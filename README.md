@@ -1,5 +1,7 @@
 # EduPro
 
+http://eduprotutoring.pythonanywhere.com
+
 Super user
 login: admin
 password: admin
