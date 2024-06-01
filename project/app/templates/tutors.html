@@ -1,11 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Korepetytorzy ⋅ EduPro{% endblock %}
 {% block content %}
-<div class="container">
-    <h1>Korepetytorzy</h1>
+<div class="container tutors-container">
         {% for user in users %}
             {% if user.account_type == 'tutor' %}
-                <p>{{ user.name }} {{ user.surname }} - {{ user.subject }}<p>
+            <div class="tutor-element">
+                <div class="tutor-pfp"><p>{{user.name|slice:"0:1"}}{{user.surname|slice:"0:1"}}</p></div>
+                <div class="tutor-info">
+                    <div class="tutor-name">{{ user.name }} {{ user.surname }}</div><br>
+                    <div class="tutor-subject">{{ user.subject }}</div>
+                </div>
+            </div>
             {% endif %}
         {% endfor %}
 </div>
