@@ -38,13 +38,17 @@ html {
 .logo {
     height: 80px;
     width: auto;
+    position: relative;
 }
 
 .logo-text {
     color: #fff;
     font-size: 40px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left:20px;
     font-weight: bold;
-    margin-left: 20px;
 }
 
 .row {
@@ -140,4 +144,44 @@ a:hover {
     width: 40%;
     justify-content: space-between;
     margin-top:10px;
+}
+
+.banner-img {
+    height: 500px;
+    width: 500px;
+    object-fit: cover;
+    border-radius: 50px;
+    transition: 1s;
+    box-shadow: -20px 15px 60px 5px #9d3ef0;
+    margin-right: 80px;
+}
+
+.banner-img:hover {
+    box-shadow: -20px 15px 60px 5px #4c72ec;
+}
+
+.banner {
+    margin-top:120px;
+}
+
+.banner-content {
+    margin-left:80px;
+}
+
+.navbar {
+    font-size:25px;
+}
+
+.navbar ul {
+    margin-left:180px;
+}
+
+.btn {
+    font-size:20px;
+}
+
+.more-content {
+    margin-top:500px;
+    padding:150px;
+    margin-bottom:100px;
 }

@@ -2,7 +2,6 @@
 {% block title %}Strona główna ⋅ EduPro{% endblock %}
 {% block content %}
 <div class="container">
-    <h1>Home</h1>
     {% if messages %}
             {% for message in messages %}
             <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
@@ -10,5 +9,25 @@
             </div>
             {% endfor %}
     {% endif %}
+    {% load static %}
+    <div class="banner row">
+        <div class="banner-content col">
+            <span class="banner-text">Odkryj swój potencjał!</span><br>
+            <a href="#about-us"><button class="btn banner-button btn-grad">Dowiedz się więcej</button></a>            
+        </div>
+        <div class="col">
+            <img src="{% static 'app/images/photo-1.jpg' %}" class="banner-img">
+        </div>
+    </div>
+    <div class="row more-content" id="about-us">
+        <div class="col">
+            <span class="content-text">
+                Celem <span class="content-text-colored"> EduPro </span>jest rozwijanie ciekawości u młodych ludzi<br>
+                <p class="content-text-small">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </span>
+        </div>
+    </div>
 </div>
 {% endblock %}
