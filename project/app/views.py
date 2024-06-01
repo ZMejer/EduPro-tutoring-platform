@@ -11,6 +11,7 @@ from django.conf import settings
 import stripe
 import time
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 def home(request):
     return render(request, "home.html")
@@ -114,7 +115,7 @@ def slots(request):
             request.session['tutor_login'] = request.POST.get('chosenTutor')
             request.session['date'] = request.POST.get('selected_hours')
         # Payment system (source: https://github.com/dotja/django-example/blob/main/user_payment/views.py)
-        stripe.api_key = 'sk_test_51PCpbN2LfliGhtUejICAbYZ1jWXGLgdksMGluf0faJpGMaRdGRPwqlbv7T7RVWCsm1WKqUWfiqhEnRtbT2TsY3Qe00nti2IPQo'
+        stripe.api_key = settings.SECRET_KEY
         checkout_session = stripe.checkout.Session.create(
             payment_method_types = ['card'],
             line_items = [
@@ -160,7 +161,7 @@ def payment_cancelled(request):
 
 @csrf_exempt
 def stripe_webhook(request):
-    stripe.api_key = 'sk_test_51PCpbN2LfliGhtUejICAbYZ1jWXGLgdksMGluf0faJpGMaRdGRPwqlbv7T7RVWCsm1WKqUWfiqhEnRtbT2TsY3Qe00nti2IPQo'
+    stripe.api_key = settings.SECRET_KEY
     time.sleep(10)
     payload = request.body
     signature_header = request.META['HTTP_STRIPE_SIGNATURE']
