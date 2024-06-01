@@ -185,3 +185,17 @@ a:hover {
     padding:150px;
     margin-bottom:100px;
 }
+
+.signup-container {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.form-control {
+    width:800px;
+}
+
+.signup-submit-button {
+    width:800px;
+}

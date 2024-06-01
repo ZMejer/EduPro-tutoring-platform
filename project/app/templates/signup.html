@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Rejestracja ⋅ EduPro{% endblock %}
 {% block content %}
-  <div class="container">
-    <h1>Rejestracja</h1>
+  <div class="container signup-container mt-5">
     {% if messages %}
         {% for message in messages %}
         <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
@@ -50,7 +49,7 @@
           </select>
         </div>
         <div class="col-sm-5">
-          <button type="submit" class="btn btn-primary">Zarejestruj się</button>
+          <button type="submit" class="btn btn-primary signup-submit-button">Zarejestruj się</button>
         </div>
     </form>
 </div>

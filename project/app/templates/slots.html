@@ -2,7 +2,7 @@
 {% block title %}Terminy ⋅ EduPro{% endblock %}
 {% block content %}
 <div class="container">
-    <h1>Terminy</h1>
+
     {% if messages %}
         {% for message in messages %}
         <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
@@ -10,6 +10,7 @@
         </div>
         {% endfor %}
     {% endif %}
+
     {% if user.is_authenticated %}
     <form action="" method="POST">
         {% csrf_token %}
@@ -129,5 +130,8 @@
 <div class="alert alert-success">
     Zaloguj się, aby wyświetlić terminy.
 </div>
+<div class="row break"></div>
+<div class="row break"></div>
 {% endif %}
+</div>
 {% endblock %}
