@@ -2,7 +2,6 @@
 {% block title %}Mój profil ⋅ EduPro{% endblock %}
 {% block content %}
 <div class="container">
-    <h1>Mój profil</h1>
     {% if messages %}
         {% for message in messages %}
         <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
@@ -11,28 +10,36 @@
         {% endfor %}
     {% endif %}
     {% if user.is_authenticated %}
-        <p>Imię: {{ user.name }}</p>
-        <p>Nazwisko: {{ user.surname }}</p>
-        <p>Typ konta: {% if user.account_type == 'tutor' %} Nauczyciel {% else %} Student {% endif %}</p>
-        <p>Login: {{ user.username }}</p>
-        <p>Email: {{ user.email }}</p>
-        {% if user.account_type == "tutor" %}
-        <p>Przedmiot: {{ user.subject }}</p>
-        {% endif %}
-        <h3>Moje rezerwacje:</h3>
+        <div class="tutor-element">
+                <div class="tutor-pfp"><p>{{user.name|slice:"0:1"}}{{user.surname|slice:"0:1"}}</p></div>
+                <div class="tutor-info">
+                    <div class="tutor-name">{{ user.name }} {{ user.surname }}</div><br>
+                    {% if user.account_type == "tutor" %}
+                    <div class="tutor-subject">{{ user.subject }}</div>
+                    {% endif %}
+                </div>
+        </div>
+        <div class="profile-info">
+            <p>Typ konta: {% if user.account_type == 'tutor' %} Nauczyciel {% else %} Student {% endif %}</p>
+            <p>Login: {{ user.username }}</p>
+            <p>Email: {{ user.email }}</p>
+            <div class="reservations">
+            <h3>Moje rezerwacje:</h3>
         {% if reservations %}
             {% for reservation in reservations %}
                 <div class="reservation">
                     <p>{{ reservation.name }}, Data: {{ reservation.data }}</p>
                     <form action="{% url 'cancel_reservation' reservation.id %}" method="post" class="">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-danger">Odwołaj</button>
+                        <button type="submit" class="btn btn-outline-danger cancel-btn">Odwołaj</button>
                     </form>
                 </div>
             {% endfor %}
         {% else %}
             <p>Brak rezerwacji.</p>
         {% endif %}
+            </div>
+        </div>
     {% else %}
     <div class="alert alert-danger">
         Zaloguj się, aby wyświetlić swój profil.

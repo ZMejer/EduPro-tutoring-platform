@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Terminy ⋅ EduPro{% endblock %}
 {% block content %}
-<div class="container">
+<div class="container" class="mt-5">
 
     {% if messages %}
         {% for message in messages %}
@@ -12,7 +12,8 @@
     {% endif %}
 
     {% if user.is_authenticated %}
-    <form action="" method="POST">
+    
+    <form action="" method="POST" class="mb-4 slots-form">
         {% csrf_token %}
         <div class="d-flex mt-5 mb-3">
         <input type="hidden" name="form_type" value="selectTutor">
@@ -30,7 +31,7 @@
         {% if chosen_tutor_name %}
         <p>Wybrany korepetytor: {{ chosen_tutor_name }}</p>
         {% endif %}
-    <form action="" method="POST">
+    <form action="" method="POST" class="slots-form-ii">
         {% csrf_token %}
         <input type="hidden" name="form_type" value="selectDate">
         <input type="hidden" name="chosenTutor" value="{% if chosen_tutor_username %}{{chosen_tutor_username}}{% else %}{% endif %}">
@@ -102,6 +103,7 @@
         </table>
         <button type="submit" class="btn btn-primary mb-5 mt-3 float-end">Potwierdź termin</button>
     </form>
+
 </div>
 <script>
     function toggleCheckbox(checkbox) {

@@ -176,7 +176,7 @@ a:hover {
     margin-left:180px;
 }
 
-.btn {
+.big-btn {
     font-size:20px;
 }
 
@@ -198,4 +198,12 @@ a:hover {
 
 .signup-submit-button {
     width:800px;
+}
+
+.slots-form {
+    margin-top:100px;
+}
+
+.slots-form-ii {
+    margin-bottom:200px;
 }

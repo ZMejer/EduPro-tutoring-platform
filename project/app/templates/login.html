@@ -1,14 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Logowanie ⋅ EduPro{% endblock %}
 {% block content %}
-<div class="container signup-container mt-5">
+<div class="container mt-5">
     {% if messages %}
         {% for message in messages %}
         <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
         {{ message }}
-        </div>
+        </div><br>
         {% endfor %}
     {% endif %}
+
+    <div class="signup-container">
     <form action="" method="POST">
         {% csrf_token %}
         <div class="col-sm-5 mb-3 mt-5">
@@ -18,8 +20,9 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="Hasło">
         </div>
         <div class="col-sm-5">
-        <button type="submit" class="btn btn-primary signup-submit-button">Zaloguj się</button>
+        <button type="submit" class="btn btn-primary signup-submit-button big-btn">Zaloguj się</button>
         </div>
     </form>
+    </div>
 </div>
 {% endblock %}
